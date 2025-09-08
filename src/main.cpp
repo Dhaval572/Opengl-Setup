@@ -13,27 +13,29 @@ std::array<float, 15> vertices =
 };
 
 // Vertex shader
-const char* vertexShaderSource = R"(
-#version 330 core
-layout(location = 0) in vec2 aPos;
-layout(location = 1) in vec3 aColor;
-out vec3 vColor;
-void main() 
-{
-    gl_Position = vec4(aPos, 0.0, 1.0);
-    vColor = aColor;
-}
+const char* vertexShaderSource = 
+R"(
+    #version 330 core
+    layout(location = 0) in vec2 aPos;
+    layout(location = 1) in vec3 aColor;
+    out vec3 vColor;
+    void main() 
+    {
+        gl_Position = vec4(aPos, 0.0, 1.0);
+        vColor = aColor;
+    }
 )";
 
 // Fragment shader
-const char* fragmentShaderSource = R"(
-#version 330 core
-in vec3 vColor;
-out vec4 FragColor;
-void main() 
-{
-    FragColor = vec4(vColor, 1.0);
-}
+const char* fragmentShaderSource = 
+R"(
+    #version 330 core
+    in vec3 vColor;
+    out vec4 FragColor;
+    void main() 
+    {
+        FragColor = vec4(vColor, 1.0);
+    }
 )";
 
 int main()
@@ -134,10 +136,23 @@ int main()
     glEnableVertexAttribArray(1);
 
     // Print OpenGL info
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "OpenGL version: " 
+        << glGetString(GL_VERSION) 
+        << std::endl;
+
+    std::cout << "GLSL version: " 
+        << glGetString(GL_SHADING_LANGUAGE_VERSION) 
+        << std::endl;
+
+    std::cout 
+        << "Renderer: " 
+        << glGetString(GL_RENDERER) 
+        << std::endl;
+
+    std::cout 
+        << "Vendor: " 
+        << glGetString(GL_VENDOR) 
+        << std::endl;
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
