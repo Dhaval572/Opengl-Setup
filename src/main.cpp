@@ -13,7 +13,7 @@ std::array<float, 15> vertices =
 };
 
 // Vertex shader
-const char* vertexShaderSource = 
+const char* vertex_shader_source = 
 R"(
     #version 460 core
     layout(location = 0) in vec2 aPos;
@@ -27,7 +27,7 @@ R"(
 )";
 
 // Fragment shader
-const char* fragmentShaderSource = 
+const char* fragment_shader_source = 
 R"(
     #version 460 core
     in vec3 vColor;
@@ -73,12 +73,12 @@ int main()
 
     // Compile vertex shader
     unsigned int v_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(v_shader, 1, &vertexShaderSource, nullptr);
+    glShaderSource(v_shader, 1, &vertex_shader_source, nullptr);
     glCompileShader(v_shader);
 
     // Compile fragment shader
     unsigned int f_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(f_shader, 1, &fragmentShaderSource, nullptr);
+    glShaderSource(f_shader, 1, &fragment_shader_source, nullptr);
     glCompileShader(f_shader);
 
     // Link shaders into program
