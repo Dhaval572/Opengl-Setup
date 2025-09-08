@@ -1,19 +1,20 @@
 #include <array>
+#include <DemoShaderLoader.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
 // Vertex + Color data
-std::array<float, 15> vertices =
+std::array<GLfloat, 15> vertices =
 {
     // positions    // colors
-     0.0f,  0.8f,   1.0f, 0.0f, 0.0f,
-     0.8f, -0.8f,   0.0f, 1.0f, 0.0f,
-    -0.8f, -0.8f,   0.0f, 0.0f, 1.0f
+     0.0f,  0.9f,   1.0f, 0.0f, 0.0f,
+     0.9f, -0.9f,   0.0f, 1.0f, 0.0f,
+    -0.9f, -0.9f,   0.0f, 0.0f, 1.0f
 };
 
 // Vertex shader
-const char* vertex_shader_source = 
+const char* vertex_shader_source =
 R"(
     #version 460 core
     layout(location = 0) in vec2 aPos;
@@ -27,7 +28,7 @@ R"(
 )";
 
 // Fragment shader
-const char* fragment_shader_source = 
+const char* fragment_shader_source =
 R"(
     #version 460 core
     in vec3 vColor;
@@ -47,7 +48,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = 
+    GLFWwindow* window =
     glfwCreateWindow
     (
         640, 480, "RGB Triangle", nullptr, nullptr
@@ -72,17 +73,17 @@ int main()
     }
 
     // Compile vertex shader
-    unsigned int v_shader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint v_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(v_shader, 1, &vertex_shader_source, nullptr);
     glCompileShader(v_shader);
 
     // Compile fragment shader
-    unsigned int f_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint f_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(f_shader, 1, &fragment_shader_source, nullptr);
     glCompileShader(f_shader);
 
     // Link shaders into program
-    unsigned int shader_program = glCreateProgram();
+    GLuint shader_program = glCreateProgram();
     glAttachShader(shader_program, v_shader);
     glAttachShader(shader_program, f_shader);
     glLinkProgram(shader_program);
@@ -92,7 +93,7 @@ int main()
     glDeleteShader(f_shader);
 
     // Setup VAO and VBO (vertex array object and vertex buffer object)
-    unsigned int VAO, VBO;
+    GLuint VAO, VBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -101,20 +102,20 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData
     (
-        GL_ARRAY_BUFFER, 
-        sizeof(vertices), 
-        vertices.data(), 
+        GL_ARRAY_BUFFER,
+        sizeof(vertices),
+        vertices.data(),
         GL_STATIC_DRAW
     );
 
     // Position attribute
     glVertexAttribPointer
     (
-        0, 
-        2, 
-        GL_FLOAT, 
-        GL_FALSE, 
-        5 * sizeof(float), 
+        0,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        5 * sizeof(float),
         reinterpret_cast<void*>(0)
     );
     glEnableVertexAttribArray(0);
@@ -122,32 +123,32 @@ int main()
     // Color attribute
     glVertexAttribPointer
     (
-        1, 
-        3, 
-        GL_FLOAT, 
-        GL_FALSE, 
-        5 * sizeof(float), 
+        1,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        5 * sizeof(float),
         reinterpret_cast<void*>(2 * sizeof(float))
     );
     glEnableVertexAttribArray(1);
 
     // Print OpenGL info
-    std::cout << "OpenGL version: " 
-        << glGetString(GL_VERSION) 
+    std::cout << "OpenGL version: "
+        << glGetString(GL_VERSION)
         << std::endl;
 
-    std::cout << "GLSL version: " 
-        << glGetString(GL_SHADING_LANGUAGE_VERSION) 
+    std::cout << "GLSL version: "
+        << glGetString(GL_SHADING_LANGUAGE_VERSION)
         << std::endl;
 
-    std::cout 
-        << "Renderer: " 
-        << glGetString(GL_RENDERER) 
+    std::cout
+        << "Renderer: "
+        << glGetString(GL_RENDERER)
         << std::endl;
 
-    std::cout 
-        << "Vendor: " 
-        << glGetString(GL_VENDOR) 
+    std::cout
+        << "Vendor: "
+        << glGetString(GL_VENDOR)
         << std::endl;
 
     // Main render loop
