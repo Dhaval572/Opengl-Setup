@@ -41,11 +41,7 @@ R"(
 int main()
 {
     // Initialize GLFW
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW\n";
-        return -1;
-    }
+    glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
