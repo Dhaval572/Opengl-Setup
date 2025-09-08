@@ -1,3 +1,4 @@
+#include <iostream>
 #include <array>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -35,7 +36,7 @@ void main()
 }
 )";
 
-int main() 
+int main()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -77,36 +78,57 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData
 	(
-		GL_ARRAY_BUFFER, 
-		sizeof(vertices), 
-		vertices.data(), 
+		GL_ARRAY_BUFFER,
+		sizeof(vertices),
+		vertices.data(),
 		GL_STATIC_DRAW
 	);
 
 	glVertexAttribPointer
 	(
-		0, 
-		2, 
-		GL_FLOAT, 
-		GL_FALSE, 
-		5 * sizeof(float), 
+		0,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		5 * sizeof(float),
 		reinterpret_cast<void*>(0)
 	);
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer
 	(
-		1, 
-		3, 
-		GL_FLOAT, 
-		GL_FALSE, 
-		5 * sizeof(float), 
+		1,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		5 * sizeof(float),
 		reinterpret_cast<void*>(2 * sizeof(float))
 	);
 	glEnableVertexAttribArray(1);
 
+	// Print OpenGL info
+	std::cout 
+		<< "OpenGL version: " 
+		<< glGetString(GL_VERSION) 
+		<< std::endl;
+
+	std::cout 
+		<< "GLSL version: " 
+		<< glGetString(GL_SHADING_LANGUAGE_VERSION) 
+		<< std::endl;
+
+	std::cout 
+		<< "Renderer: " 
+		<< glGetString(GL_RENDERER) 
+		<< std::endl;
+
+	std::cout 
+		<< "Vendor: " 
+		<< glGetString(GL_VENDOR) 
+		<< std::endl;
+
 	// Main loop
-	while (!glfwWindowShouldClose(window)) 
+	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 
