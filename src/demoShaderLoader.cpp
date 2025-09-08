@@ -1,29 +1,34 @@
-#include <demoShaderLoader.h>
-#include <iostream>
+#include <DemoShaderLoader.h>
 #include <fstream>
+#include <iostream>
 
 //path is used for error reporting
-GLint createShaderFromData(const char *data, GLenum shaderType, const char *path = 0)
+GLint CreateShaderFromData
+(	
+	const char *data, 
+	GLenum shader_type, 
+	const char *path = 0
+)
 {
-	GLuint shaderId = glCreateShader(shaderType);
-	glShaderSource(shaderId, 1, &data, nullptr);
-	glCompileShader(shaderId);
+	GLuint shader_id = glCreateShader(shader_type);
+	glShaderSource(shader_id, 1, &data, nullptr);
+	glCompileShader(shader_id);
 
-	GLint rezult = 0;
-	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &rezult);
+	GLint result = 0;
+	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result);
 
-	if (!rezult)
+	if (!result)
 	{
 		char *message = 0;
 		int   l = 0;
 
-		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &l);
+		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &l);
 
 		if (l)
 		{
 			message = new char[l];
 
-			glGetShaderInfoLog(shaderId, l, &l, message);
+			glGetShaderInfoLog(shader_id, l, &l, message);
 
 			message[l - 1] = 0;
 
@@ -38,17 +43,17 @@ GLint createShaderFromData(const char *data, GLenum shaderType, const char *path
 			std::cout<< "unknown error while compiling shader :(\n";
 		}
 
-		glDeleteShader(shaderId);
+		glDeleteShader(shader_id);
 
-		shaderId = 0;
-		return shaderId;
+		shader_id = 0;
+		return shader_id;
 	}
 
-	return shaderId;
+	return shader_id;
 }
 
 
-GLint createShaderFromFile(const char *name, GLenum shaderType)
+GLint CreateShaderFromFile(const char *name, GLenum shader_type)
 {
 	std::ifstream f(name);
 	std::string str;
@@ -69,34 +74,52 @@ GLint createShaderFromFile(const char *name, GLenum shaderType)
 		return 0; 
 	}
 
-	str.assign((std::istreambuf_iterator<char>(f)),
-		std::istreambuf_iterator<char>());
+	str.assign
+	(
+		(std::istreambuf_iterator<char>(f)),
+		std::istreambuf_iterator<char>()
+	);
 
 	
-	auto rez = createShaderFromData(str.c_str(), shaderType, name);
+	auto result = CreateShaderFromData(str.c_str(), shader_type, name);
 
-	return rez;
+	return result;
 }
 
-bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char *fragmentShaderData)
+bool Shader::b_LoadShaderProgramFromData
+(
+	const char *vertex_shader_data, 
+	const char *fragment_shader_data
+)
 {
-	auto vertexId = createShaderFromData(vertexShaderData, GL_VERTEX_SHADER);
-	auto fragmentId = createShaderFromData(fragmentShaderData, GL_FRAGMENT_SHADER);
+	GLint vertex_id = 
+	CreateShaderFromData
+	(
+		vertex_shader_data, 
+		GL_VERTEX_SHADER
+	);
 
-	if (vertexId == 0 || fragmentId == 0)
+	GLint fragment_id = 
+	CreateShaderFromData
+	(
+		fragment_shader_data, 
+		GL_FRAGMENT_SHADER
+	);
+
+	if (vertex_id == 0 || fragment_id == 0)
 	{
 		return 0;
 	}
 
 	id = glCreateProgram();
 
-	glAttachShader(id, vertexId);
-	glAttachShader(id, fragmentId);
+	glAttachShader(id, vertex_id);
+	glAttachShader(id, fragment_id);
 
 	glLinkProgram(id);
 
-	glDeleteShader(vertexId);
-	glDeleteShader(fragmentId);
+	glDeleteShader(vertex_id);
+	glDeleteShader(fragment_id);
 
 	GLint info = 0;
 	glGetProgramiv(id, GL_LINK_STATUS, &info);
@@ -126,28 +149,113 @@ bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char 
 	return true;
 }
 
-bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char *geometryShaderData, const char *fragmentShaderData)
+bool Shader::b_LoadShaderProgramFromData
+(
+	const char *vertex_shader_data, 
+	const char *geometry_shader_data, 
+	const char *fragment_shader_data
+)
 {
-	auto vertexId = createShaderFromData(vertexShaderData, GL_VERTEX_SHADER);
-	auto geometryId = createShaderFromData(geometryShaderData, GL_GEOMETRY_SHADER);
-	auto fragmentId = createShaderFromData(fragmentShaderData, GL_FRAGMENT_SHADER);
+	GLint vertex_id = 
+	CreateShaderFromData
+	(
+		vertex_shader_data, 
+		GL_VERTEX_SHADER
+	);
 
-	if (vertexId == 0 || fragmentId == 0 || geometryId == 0)
+	GLint geometry_id = 
+	CreateShaderFromData
+	(
+		geometry_shader_data, 
+		GL_GEOMETRY_SHADER
+	);
+
+	GLint fragment_id = 
+	CreateShaderFromData
+	(
+		fragment_shader_data, 
+		GL_FRAGMENT_SHADER
+	);
+
+	if (vertex_id == 0 || fragment_id == 0 || geometry_id == 0)
 	{
 		return 0;
 	}
 
 	id = glCreateProgram();
 
-	glAttachShader(id, vertexId);
-	glAttachShader(id, geometryId);
-	glAttachShader(id, fragmentId);
+	glAttachShader(id, vertex_id);
+	glAttachShader(id, geometry_id);
+	glAttachShader(id, fragment_id);
 
 	glLinkProgram(id);
 
-	glDeleteShader(vertexId);
-	glDeleteShader(geometryId);
-	glDeleteShader(fragmentId);
+	glDeleteShader(vertex_id);
+	glDeleteShader(geometry_id);
+	glDeleteShader(fragment_id);
+
+	GLint info = 0;
+	glGetProgramiv(id, GL_LINK_STATUS, &info);
+
+	if (info != GL_TRUE)
+	{
+		char *message = 0;
+		int   l = 0;
+
+		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
+
+		message = new char[l];
+
+		glGetProgramInfoLog(id, l, &l, message);
+
+		std::cout << std::string("Link error: ") + message << "\n";
+
+		delete[] message;
+
+		glDeleteProgram(id);
+		id = 0;
+		return 0;
+	}
+	glValidateProgram(id);
+
+	return true;
+}
+
+bool Shader::b_loadShaderProgramFromFile
+(
+	const char *vertex_shader, 
+	const char *fragment_shader
+)
+{
+
+	GLint vertex_id = 
+	CreateShaderFromFile
+	(
+		vertex_shader, 
+		GL_VERTEX_SHADER
+	);
+
+	GLint fragment_id = 
+	CreateShaderFromFile
+	(
+		fragment_shader, 
+		GL_FRAGMENT_SHADER
+	);
+
+	if (vertex_id == 0 || fragment_id == 0)
+	{
+		return 0;
+	}
+
+	id = glCreateProgram();
+
+	glAttachShader(id, vertex_id);
+	glAttachShader(id, fragment_id);
+
+	glLinkProgram(id);
+
+	glDeleteShader(vertex_id);
+	glDeleteShader(fragment_id);
 
 	GLint info = 0;
 	glGetProgramiv(id, GL_LINK_STATUS, &info);
@@ -177,78 +285,50 @@ bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char 
 	return true;
 }
 
-bool Shader::loadShaderProgramFromFile(const char *vertexShader, const char *fragmentShader)
+bool Shader::b_loadShaderProgramFromFile
+(
+	const char *vertex_shader, 
+	const char *geometry_shader, 
+	const char *fragment_shader
+)
 {
+	GLint vertex_id = 
+	CreateShaderFromFile
+	(
+		vertex_shader, 
+		GL_VERTEX_SHADER
+	);
 
-	auto vertexId = createShaderFromFile(vertexShader, GL_VERTEX_SHADER);
-	auto fragmentId = createShaderFromFile(fragmentShader, GL_FRAGMENT_SHADER);
+	GLint geometry_id = 
+	CreateShaderFromFile
+	(
+		geometry_shader, 
+		GL_GEOMETRY_SHADER
+	);
 
+	GLint fragment_id = 
+	CreateShaderFromFile
+	(
+		fragment_shader, 
+		GL_FRAGMENT_SHADER
+	);
 
-	if (vertexId == 0 || fragmentId == 0)
+	if (vertex_id == 0 || fragment_id == 0 || geometry_id == 0)
 	{
 		return 0;
 	}
 
 	id = glCreateProgram();
 
-	glAttachShader(id, vertexId);
-	glAttachShader(id, fragmentId);
+	glAttachShader(id, vertex_id);
+	glAttachShader(id, geometry_id);
+	glAttachShader(id, fragment_id);
 
 	glLinkProgram(id);
 
-	glDeleteShader(vertexId);
-	glDeleteShader(fragmentId);
-
-	GLint info = 0;
-	glGetProgramiv(id, GL_LINK_STATUS, &info);
-
-	if (info != GL_TRUE)
-	{
-		char *message = 0;
-		int   l = 0;
-
-		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
-
-		message = new char[l];
-
-		glGetProgramInfoLog(id, l, &l, message);
-
-		std::cout << std::string("Link error: ") + message << "\n";
-
-		delete[] message;
-
-		glDeleteProgram(id);
-		id = 0;
-		return 0;
-	}
-
-	glValidateProgram(id);
-
-	return true;
-}
-
-bool Shader::loadShaderProgramFromFile(const char *vertexShader, const char *geometryShader, const char *fragmentShader)
-{
-	auto vertexId = createShaderFromFile(vertexShader, GL_VERTEX_SHADER);
-	auto geometryId = createShaderFromFile(geometryShader, GL_GEOMETRY_SHADER);
-	auto fragmentId = createShaderFromFile(fragmentShader, GL_FRAGMENT_SHADER);
-
-	if (vertexId == 0 || fragmentId == 0 || geometryId == 0)
-	{
-		return 0;
-	}
-
-	id = glCreateProgram();
-
-	glAttachShader(id, vertexId);
-	glAttachShader(id, geometryId);
-	glAttachShader(id, fragmentId);
-
-	glLinkProgram(id);
-
-	glDeleteShader(vertexId);
-	glDeleteShader(geometryId);
-	glDeleteShader(fragmentId);
+	glDeleteShader(vertex_id);
+	glDeleteShader(geometry_id);
+	glDeleteShader(fragment_id);
 
 	GLint info = 0;
 	glGetProgramiv(id, GL_LINK_STATUS, &info);
@@ -289,14 +369,14 @@ void Shader::clear()
 	id = 0;
 }
 
-GLint Shader::getUniform(const char *name)
+GLint Shader::GetUniform(const char *name)
 {
-	return ::getUniform(this->id, name);
+	return ::GetUniform(this->id, name);
 }
 
-GLint getUniform(GLuint shaderId, const char *name)
+GLint GetUniform(GLuint shader_id, const char *name)
 {
-	GLint uniform = glGetUniformLocation(shaderId, name);
+	GLint uniform = glGetUniformLocation(shader_id, name);
 	if (uniform == -1)
 	{
 		std::cout << "uniform error " + std::string(name);

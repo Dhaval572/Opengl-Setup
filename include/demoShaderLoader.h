@@ -5,19 +5,37 @@ struct Shader
 {
 	GLuint id = 0;
 
-	bool loadShaderProgramFromData(const char *vertexShaderData, const char *fragmentShaderData);
-	bool loadShaderProgramFromData(const char *vertexShaderData,
-		const char *geometryShaderData, const char *fragmentShaderData);
+	bool b_LoadShaderProgramFromData
+	(
+		const char *vertex_shader_data, 
+		const char *fragment_shader_data
+	);
 
-	bool loadShaderProgramFromFile(const char *vertexShader, const char *fragmentShader);
-	bool loadShaderProgramFromFile(const char *vertexShader,
-		const char *geometryShader, const char *fragmentShader);
+	bool b_LoadShaderProgramFromData
+	(
+		const char *vertex_shader_data,
+		const char *geometry_shader_data, 
+		const char *fragment_shader_data
+	);
+
+	bool b_loadShaderProgramFromFile
+	(
+		const char *vertex_shader, 
+		const char *fragment_shader
+	);
+
+	bool b_loadShaderProgramFromFile
+	(
+		const char *vertex_shader,
+		const char *geometry_shader, 
+		const char *fragment_shader
+	);
 
 	void bind();
 
 	void clear();
 
-	GLint getUniform(const char *name);
+	GLint GetUniform(const char *name);
 };
 
-GLint getUniform(GLuint shaderId, const char *name);
+GLint GetUniform(GLuint shader_id, const char *name);

@@ -1,8 +1,10 @@
-﻿# OpenGL Setup
+﻿# OpenGL Project — Quick Start (Visual Studio)
+
+Simple instructions to open & run this project in **Visual Studio**.
 
 ## Prerequisite
-- Visual Studio
-  
+- Visual Studio (with **Desktop development with C++** workload)
+
 ## Quick Steps
 1. Open **Visual Studio**.  
 2. Go to **File → Open → CMake...**  
