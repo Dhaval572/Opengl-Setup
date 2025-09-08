@@ -48,10 +48,10 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window =
-        glfwCreateWindow
-        (
-            640, 480, "RGB Triangle", nullptr, nullptr
-        );
+    glfwCreateWindow
+    (
+        640, 480, "RGB Triangle", nullptr, nullptr
+    );
 
     if (!window)
     {
