@@ -49,8 +49,8 @@ int main()
     Shader s1;
     s1.b_LoadShaderProgramFromFile
     (
-        "resources/Simple.vert", 
-        "resources/Simple.frag"
+        "resources/Sample.vert", 
+        "resources/Sample.frag"
     );
 
     // Setup VAO and VBO ( vertex array object and vertex buffer object )
