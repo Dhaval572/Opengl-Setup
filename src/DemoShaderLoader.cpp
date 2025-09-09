@@ -331,12 +331,12 @@ bool Shader::b_LoadShaderProgramFromFile
 	return true;
 }
 
-void Shader::bind() const
+void Shader::Bind() const
 {
 	glUseProgram(id);
 }
 
-void Shader::clear()
+void Shader::Clear()
 {
 	glDeleteProgram(id);
 	id = 0;
