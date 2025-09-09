@@ -208,7 +208,7 @@ bool Shader::b_LoadShaderProgramFromData
 	return true;
 }
 
-bool Shader::b_loadShaderProgramFromFile
+bool Shader::b_LoadShaderProgramFromFile
 (
 	const char* vertex_shader,
 	const char* fragment_shader
@@ -267,7 +267,7 @@ bool Shader::b_loadShaderProgramFromFile
 	return true;
 }
 
-bool Shader::b_loadShaderProgramFromFile
+bool Shader::b_LoadShaderProgramFromFile
 (
 	const char* vertex_shader,
 	const char* geometry_shader,
@@ -331,7 +331,7 @@ bool Shader::b_loadShaderProgramFromFile
 	return true;
 }
 
-void Shader::bind()
+void Shader::bind() const
 {
 	glUseProgram(id);
 }
@@ -342,7 +342,7 @@ void Shader::clear()
 	id = 0;
 }
 
-GLint Shader::GetUniform(const char* name)
+GLint Shader::GetUniform(const char* name) const
 {
 	return ::GetUniform(this->id, name);
 }
