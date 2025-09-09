@@ -31,9 +31,9 @@ struct Shader
 		const char* fragment_shader
 	);
 
-	void bind() const;
+	void Bind() const;
 
-	void clear();
+	void Clear();
 
 	GLint GetUniform(const char* name) const;
 };
