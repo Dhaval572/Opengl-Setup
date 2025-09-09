@@ -114,7 +114,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        s1.bind();
+        s1.Bind();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -125,7 +125,7 @@ int main()
     // Cleanup OpenGL objects
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    s1.clear();
+    s1.Clear();
 
     // Cleanup GLFW
     glfwDestroyWindow(window);
