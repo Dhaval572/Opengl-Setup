@@ -1,4 +1,5 @@
 #include <array>
+#include <DemoShaderLoader.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -11,32 +12,6 @@ std::array<GLfloat, 15> vertices =
      0.9f, -0.9f,   0.0f, 1.0f, 0.0f,
     -0.9f, -0.9f,   0.0f, 0.0f, 1.0f
 };
-
-// Vertex shader
-const char* vertex_shader_source =
-R"(
-    #version 460 core
-    layout(location = 0) in vec2 aPos;
-    layout(location = 1) in vec3 aColor;
-    out vec3 vColor;
-    void main() 
-    {
-        gl_Position = vec4(aPos, 0.0, 1.0);
-        vColor = aColor;
-    }
-)";
-
-// Fragment shader
-const char* fragment_shader_source =
-R"(
-    #version 460 core
-    in vec3 vColor;
-    out vec4 FragColor;
-    void main() 
-    {
-        FragColor = vec4(vColor, 1.0);
-    }
-)";
 
 int main()
 {
@@ -71,34 +46,21 @@ int main()
         return -1;
     }
 
-    // Compile vertex shader
-    GLuint v_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(v_shader, 1, &vertex_shader_source, nullptr);
-    glCompileShader(v_shader);
+    Shader s1;
+    s1.b_LoadShaderProgramFromFile
+    (
+        "resources/Simple.vert", 
+        "resources/Simple.frag"
+    );
 
-    // Compile fragment shader
-    GLuint f_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(f_shader, 1, &fragment_shader_source, nullptr);
-    glCompileShader(f_shader);
-
-    // Link shaders into program
-    GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, v_shader);
-    glAttachShader(shader_program, f_shader);
-    glLinkProgram(shader_program);
-
-    // Delete shader objects after linking
-    glDeleteShader(v_shader);
-    glDeleteShader(f_shader);
-
-    // Setup VAO and VBO (vertex array object and vertex buffer object)
+    // Setup VAO and VBO ( vertex array object and vertex buffer object )
     GLuint VAO, VBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
     glBindVertexArray(VAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
     glBufferData
     (
         GL_ARRAY_BUFFER,
@@ -140,13 +102,11 @@ int main()
         << glGetString(GL_SHADING_LANGUAGE_VERSION)
         << std::endl;
 
-    std::cout
-        << "Renderer: "
+    std::cout << "Renderer: "
         << glGetString(GL_RENDERER)
         << std::endl;
 
-    std::cout
-        << "Vendor: "
+    std::cout << "Vendor: "
         << glGetString(GL_VENDOR)
         << std::endl;
 
@@ -154,7 +114,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(shader_program);
+        s1.bind();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -165,7 +125,7 @@ int main()
     // Cleanup OpenGL objects
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shader_program);
+    s1.clear();
 
     // Cleanup GLFW
     glfwDestroyWindow(window);
